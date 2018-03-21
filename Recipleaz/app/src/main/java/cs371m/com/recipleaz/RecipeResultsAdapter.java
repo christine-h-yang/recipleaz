@@ -59,9 +59,12 @@ public class RecipeResultsAdapter extends RecyclerView.Adapter<RecipeResultsAdap
 
     @Override
     public void onBindViewHolder(ResultsViewHolder holder, final int position) {
-        holder.text.setText(mData.get(position).title);
+        Recipe recipe = mData.get(position);
+        Log.d("TESTING", "onBindViewHolder: binding " + recipe);
+
+        holder.text.setText(recipe.title);
         Glide.with(context)
-                .load(mData.get(position).imageURL)
+                .load(recipe.imageURL)
                 .into(holder.image);
     }
 
