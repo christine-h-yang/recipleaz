@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
@@ -19,6 +20,8 @@ public class SearchResultsActivity extends AppCompatActivity {
     private Net net;
     private VolleyFetch volleyFetch;
     private RecipeService recipeService;
+    protected LinearLayoutManager recyclerViewLayoutManager;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,7 +34,13 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         // TODO: can add progress bar indicator
 
+
         RecyclerView rv = findViewById(R.id.search_results);
+
+        recyclerViewLayoutManager = new LinearLayoutManager(getApplicationContext());
+        rv.setLayoutManager(recyclerViewLayoutManager);
+        //rv.setItemAnimator(new DefaultItemAnimator());
+
         adapter = new RecipeResultsAdapter(getApplicationContext());
         rv.setAdapter(adapter);
 
