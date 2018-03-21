@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements RecipeJSON.IRecip
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("https")
                 .authority("api.edamam.com")
-                .appendPath("search.json")
+                .appendPath("search")
                 .appendQueryParameter("app_id", "74554488")
                 .appendQueryParameter("app_key", "2bdf7a97678717c50a95741d4df27b70")
                 .appendQueryParameter("q", searchText.getText().toString());
