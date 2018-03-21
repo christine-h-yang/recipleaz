@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
                 intent.putExtra("searchText", searchText.getText().toString());
-                getApplicationContext().startActivity(intent);
+                MainActivity.this.startActivity(intent);
             }
         });
     }
