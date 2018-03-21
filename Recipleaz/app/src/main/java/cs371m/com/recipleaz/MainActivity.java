@@ -7,14 +7,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity implements RecipeJSON.IRecipeJSON {
+public class MainActivity extends AppCompatActivity {
 
-    protected static final String AppName = "Recipeaz";
+    protected static final String AppName = "Recipleaz";
 
     private Button searchButton;
     private EditText searchText;
     private Net net;
     private VolleyFetch volleyFetch;
+    private RecipeService recipeService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,39 +30,13 @@ public class MainActivity extends AppCompatActivity implements RecipeJSON.IRecip
 
         volleyFetch = new VolleyFetch();
 
+        recipeService = new RecipeService(net, volleyFetch);
+
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchRecipe();
+                recipeService.searchRecipe(searchText.getText().toString());
             }
         });
-    }
-
-    private void searchRecipe() {
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("https")
-                .authority("api.edamam.com")
-                .appendPath("search")
-                .appendQueryParameter("app_id", "74554488")
-                .appendQueryParameter("app_key", "2bdf7a97678717c50a95741d4df27b70")
-                .appendQueryParameter("q", searchText.getText().toString());
-        String url = builder.build().toString();
-
-        volleyFetch.add(this, url);
-    }
-
-    @Override
-    public void fetchStart() {
-
-    }
-
-    @Override
-    public void fetchCancel() {
-
-    }
-
-    @Override
-    public void fetchComplete() {
-
     }
 }
