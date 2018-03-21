@@ -25,6 +25,7 @@ public class VolleyFetch {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d("response", response.toString());
+                recipeJSON.fetchComplete(response);
             }
         }, new Response.ErrorListener() {
             @Override

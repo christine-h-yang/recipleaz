@@ -5,4 +5,8 @@ public class Recipe {
     public String[] ingredients;
     public String instructionsURL;
     public String title;
+
+    public String toString() {
+        return title + ": " + imageURL;
+    }
 }

@@ -2,6 +2,8 @@ package cs371m.com.recipleaz;
 
 import android.net.Uri;
 
+import org.json.JSONObject;
+
 
 public class RecipeService implements RecipeJSON.IRecipeJSON {
 
@@ -21,6 +23,10 @@ public class RecipeService implements RecipeJSON.IRecipeJSON {
     }
 
     public void searchRecipe(String query) {
+        searchRecipe(query, this);
+    }
+
+    public void searchRecipe(String query, RecipeJSON.IRecipeJSON fetchEventHandler) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("https")
                 .authority(API_URL)
@@ -30,7 +36,7 @@ public class RecipeService implements RecipeJSON.IRecipeJSON {
                 .appendQueryParameter("q", query);
         String url = builder.build().toString();
 
-        volleyFetch.add(this, url);
+        volleyFetch.add(fetchEventHandler, url);
     }
 
     @Override
@@ -39,7 +45,7 @@ public class RecipeService implements RecipeJSON.IRecipeJSON {
     }
 
     @Override
-    public void fetchComplete() {
+    public void fetchComplete(JSONObject response) {
 
     }
 
