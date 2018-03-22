@@ -28,20 +28,11 @@ public class RecipeResultsAdapter extends RecyclerView.Adapter<RecipeResultsAdap
     public class ResultsViewHolder extends RecyclerView.ViewHolder {
         TextView text;
         ImageView image;
-        View container;
 
-        public ResultsViewHolder(View theView) {
-            super(theView);
-            container = theView;
-            image = theView.findViewById(R.id.recipe_pic);
-            text = theView.findViewById(R.id.recipe_name);
-
-            container.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // TODO: launch new activity
-                }
-            });
+        public ResultsViewHolder(View view) {
+            super(view);
+            image = view.findViewById(R.id.recipe_pic);
+            text = view.findViewById(R.id.recipe_name);
         }
     }
 

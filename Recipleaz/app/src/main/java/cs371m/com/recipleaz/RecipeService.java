@@ -1,11 +1,14 @@
 package cs371m.com.recipleaz;
 
 import android.net.Uri;
+import android.util.Log;
+
+import com.android.volley.VolleyError;
 
 import org.json.JSONObject;
 
 
-public class RecipeService implements RecipeJSON.IRecipeJSON {
+public class RecipeService {
 
     // TODO: the below two fields should be read from a configuration file and not checked into
     // version control
@@ -14,19 +17,21 @@ public class RecipeService implements RecipeJSON.IRecipeJSON {
 
     private final String API_URL = "api.edamam.com";
 
-    private Net net;
-    private VolleyFetch volleyFetch;
+    private static final RecipeService instance = new RecipeService();
 
-    public RecipeService(Net net, VolleyFetch volleyFetch) {
-        this.net = net;
-        this.volleyFetch = volleyFetch;
+    //private constructor to avoid client applications to use constructor
+    private RecipeService() {
     }
 
-    public void searchRecipe(String query) {
-        searchRecipe(query, this);
+    public static RecipeService getInstance(){
+        return instance;
     }
 
-    public void searchRecipe(String query, RecipeJSON.IRecipeJSON fetchEventHandler) {
+    // TODO: I think it would be cool to have requests use method chaining
+    // define a request class with the following methods, where any 'onXXXX' returns itself:
+    // onStart, onSuccess, onError, onCancel, start, and cancel methods)
+    // then, API methods would be easier to write because there would be less boilerplate
+    public void searchRecipe(String query, final RecipeJSON.IRecipeJSON fetchEventHandler) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("https")
                 .authority(API_URL)
@@ -36,21 +41,17 @@ public class RecipeService implements RecipeJSON.IRecipeJSON {
                 .appendQueryParameter("q", query);
         String url = builder.build().toString();
 
-        volleyFetch.add(fetchEventHandler, url);
-    }
+        VolleyFetch volleyFetch = new VolleyFetch() {
+            @Override
+            public void onResponse(JSONObject response) {
+                fetchEventHandler.fetchComplete(response);
+            }
 
-    @Override
-    public void fetchStart() {
-
-    }
-
-    @Override
-    public void fetchComplete(JSONObject response) {
-
-    }
-
-    @Override
-    public void fetchCancel() {
-
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                fetchEventHandler.fetchCancel();
+            }
+        };
+        volleyFetch.request(url);
     }
 }

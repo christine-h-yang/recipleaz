@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,8 +19,6 @@ import java.util.List;
 public class SearchResultsActivity extends AppCompatActivity {
 
     private RecipeResultsAdapter adapter;
-    private Net net;
-    private VolleyFetch volleyFetch;
     private RecipeService recipeService;
     protected LinearLayoutManager recyclerViewLayoutManager;
 
@@ -28,12 +28,9 @@ public class SearchResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_results);
 
-        net = Net.getInstance();
-        volleyFetch = new VolleyFetch();
-        recipeService = new RecipeService(net, volleyFetch);
+        recipeService = RecipeService.getInstance();
 
         // TODO: can add progress bar indicator
-
 
         RecyclerView rv = findViewById(R.id.search_results);
 
@@ -43,6 +40,21 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         adapter = new RecipeResultsAdapter(getApplicationContext());
         rv.setAdapter(adapter);
+
+        rv.addOnItemTouchListener(new RecyclerViewTouchListener(this, rv,
+                        new RecyclerViewTouchListener.ClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+                        Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
+                        intent.putExtra("searchText", "beef");
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                    }
+                }));
 
         Intent intent = getIntent();
         String searchText = intent.getStringExtra("searchText");
@@ -54,6 +66,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
             @Override
             public void fetchComplete(JSONObject jsonObject) {
+                Log.d("response", jsonObject.toString());
                 List<Recipe> recipes = new ArrayList<>();
                 try {
                     JSONArray results = jsonObject.getJSONArray("hits");
