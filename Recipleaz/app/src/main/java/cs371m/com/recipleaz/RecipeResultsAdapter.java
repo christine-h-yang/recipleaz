@@ -25,14 +25,35 @@ public class RecipeResultsAdapter extends RecyclerView.Adapter<RecipeResultsAdap
     private ArrayList<Recipe> mData = new ArrayList<>();
     private Context context;
 
-    public class ResultsViewHolder extends RecyclerView.ViewHolder {
-        TextView text;
-        ImageView image;
+    public class ResultsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView textView;
+        private ImageView imageView;
+        private String text;
+        private String imageURL;
 
         public ResultsViewHolder(View view) {
             super(view);
-            image = view.findViewById(R.id.recipe_pic);
-            text = view.findViewById(R.id.recipe_name);
+            view.setOnClickListener(this);
+            imageView = view.findViewById(R.id.recipe_pic);
+            textView = view.findViewById(R.id.recipe_name);
+        }
+
+        public void setText(String text) {
+            this.text = text;
+            textView.setText(text);
+        }
+
+        public void setImage(String imageURL) {
+            this.imageURL = imageURL;
+            Glide.with(context)
+                    .load(imageURL)
+                    .into(imageView);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Log.d("ONCLICK", "onClick: CLICKED SOMETHING");
+            ClarifaiService.getInstance().processImage(imageURL);
         }
     }
 
@@ -51,12 +72,9 @@ public class RecipeResultsAdapter extends RecyclerView.Adapter<RecipeResultsAdap
     @Override
     public void onBindViewHolder(ResultsViewHolder holder, final int position) {
         Recipe recipe = mData.get(position);
-        Log.d("TESTING", "onBindViewHolder: binding " + recipe);
 
-        holder.text.setText(recipe.title);
-        Glide.with(context)
-                .load(recipe.imageURL)
-                .into(holder.image);
+        holder.setText(recipe.title);
+        holder.setImage(recipe.imageURL);
     }
 
     @Override

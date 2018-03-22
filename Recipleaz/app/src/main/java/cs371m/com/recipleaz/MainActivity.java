@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         uploadPhoto = findViewById(R.id.photo_upload);
 
         Net.init(this);
+        new ClarifaiService().init();
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
