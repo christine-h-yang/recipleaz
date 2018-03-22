@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,6 +18,7 @@ import java.util.List;
 
 public class SearchResultsActivity extends AppCompatActivity {
 
+    private ProgressBar progressBar;
     private RecipeResultsAdapter adapter;
     private Net net;
     private VolleyFetch volleyFetch;
@@ -32,8 +35,8 @@ public class SearchResultsActivity extends AppCompatActivity {
         volleyFetch = new VolleyFetch();
         recipeService = new RecipeService(net, volleyFetch);
 
-        // TODO: can add progress bar indicator
-
+        progressBar = findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
 
         RecyclerView rv = findViewById(R.id.search_results);
 
@@ -69,6 +72,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                     Log.d("ERROR", "fetchComplete: " + e.toString());
                 }
 
+                progressBar.setVisibility(View.GONE);
                 adapter.add(recipes);
             }
 
