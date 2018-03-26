@@ -57,7 +57,7 @@ public class RecipeResultsAdapter extends RecyclerView.Adapter<RecipeResultsAdap
             Log.d("ONCLICK", "onClick: CLICKED SOMETHING");
             ClarifaiService.getInstance().processImage(imageURL);
 
-            Intent intent = new Intent(context, SearchResultsActivity.class);
+            Intent intent = new Intent(context, RecipeActivity.class);
             intent.putExtra("searchText", "beef");
             context.startActivity(intent);
         }

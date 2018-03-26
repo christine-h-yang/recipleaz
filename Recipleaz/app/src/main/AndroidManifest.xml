@@ -23,6 +23,9 @@
             android:label="Search Results"
             android:parentActivityName=".MainActivity" >
         </activity>
+        <activity android:name=".RecipeActivity"
+            android:parentActivityName=".MainActivity" >
+        </activity>
     </application>
 
 </manifest>
