@@ -44,21 +44,6 @@ public class SearchResultsActivity extends AppCompatActivity {
         adapter = new RecipeResultsAdapter(getApplicationContext());
         rv.setAdapter(adapter);
 
-        rv.addOnItemTouchListener(new RecyclerViewTouchListener(this, rv,
-                        new RecyclerViewTouchListener.ClickListener() {
-                    @Override
-                    public void onClick(View view, int position) {
-                        Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
-                        intent.putExtra("searchText", "beef");
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onLongClick(View view, int position) {
-
-                    }
-                }));
-
         Intent intent = getIntent();
         String searchText = intent.getStringExtra("searchText");
         recipeService.searchRecipe(searchText, new RecipeJSON.IRecipeJSON() {

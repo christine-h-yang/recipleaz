@@ -30,12 +30,14 @@ public class RecipeResultsAdapter extends RecyclerView.Adapter<RecipeResultsAdap
         private ImageView imageView;
         private String text;
         private String imageURL;
+        private Context context;
 
         public ResultsViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
             imageView = view.findViewById(R.id.recipe_pic);
             textView = view.findViewById(R.id.recipe_name);
+            context = view.getContext();
         }
 
         public void setText(String text) {
@@ -54,6 +56,10 @@ public class RecipeResultsAdapter extends RecyclerView.Adapter<RecipeResultsAdap
         public void onClick(View view) {
             Log.d("ONCLICK", "onClick: CLICKED SOMETHING");
             ClarifaiService.getInstance().processImage(imageURL);
+
+            Intent intent = new Intent(context, SearchResultsActivity.class);
+            intent.putExtra("searchText", "beef");
+            context.startActivity(intent);
         }
     }
 
