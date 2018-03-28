@@ -60,9 +60,9 @@ public class SearchResultsActivity extends AppCompatActivity {
                     JSONArray results = jsonObject.getJSONArray("hits");
                     for (int i = 0; i < results.length(); i++) {
                         JSONObject result = ((JSONObject) results.get(i)).getJSONObject("recipe");
-                        Recipe recipe = new Recipe();
-                        recipe.imageURL = result.getString("image");
-                        recipe.title = result.getString("label");
+                        String imageURL = result.getString("image");
+                        String title = result.getString("label");
+                        Recipe recipe = new Recipe(imageURL, null, null, title);
                         recipes.add(recipe);
                         Log.d("testing", "fetchComplete: " + recipe);
                     }
