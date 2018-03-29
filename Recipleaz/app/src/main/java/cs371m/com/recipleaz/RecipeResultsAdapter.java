@@ -2,22 +2,16 @@ package cs371m.com.recipleaz;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,14 +24,12 @@ public class RecipeResultsAdapter extends RecyclerView.Adapter<RecipeResultsAdap
         private ImageView imageView;
         private String text;
         private String imageURL;
-        private Context context;
 
         public ResultsViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
             imageView = view.findViewById(R.id.recipe_pic);
             textView = view.findViewById(R.id.recipe_name);
-            context = view.getContext();
         }
 
         public void setText(String text) {
@@ -57,8 +49,10 @@ public class RecipeResultsAdapter extends RecyclerView.Adapter<RecipeResultsAdap
             Log.d("ONCLICK", "onClick: CLICKED SOMETHING");
             ClarifaiService.getInstance().processImage(imageURL);
 
+            Recipe recipe = mData.get(getAdapterPosition());
+
             Intent intent = new Intent(context, RecipeActivity.class);
-            intent.putExtra("searchText", "beef");
+            intent.putExtra("recipe", recipe);
             context.startActivity(intent);
         }
     }
