@@ -6,4 +6,6 @@
     <string name="or">or</string>
     <string name="ingredient_list">Ingredient List</string>
     <string name="recipe_lookup">See Full Recipe</string>
+    <string name="yield">Yield:</string>
+    <string name="servings" formatted="false">%d servings</string>
 </resources>

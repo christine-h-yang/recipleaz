@@ -23,6 +23,7 @@ public class RecipeActivity extends AppCompatActivity {
     private TextView recipeName;
     private TextView recipeCost;
     private TextView recipeLink;
+    private TextView recipeYield;
     private RecyclerView ingredientList;
     private Recipe recipe;
     private ArrayList<Ingredient> ingredients;
@@ -36,6 +37,7 @@ public class RecipeActivity extends AppCompatActivity {
         recipeName = findViewById(R.id.recipe_name);
         recipeCost = findViewById(R.id.recipe_cost);
         recipeLink = findViewById(R.id.recipe_link);
+        recipeYield = findViewById(R.id.recipe_yield);
         ingredientList = findViewById(R.id.ingredient_list);
 
         recipe = getIntent().getParcelableExtra("recipe");
@@ -43,6 +45,7 @@ public class RecipeActivity extends AppCompatActivity {
         setTitle(recipe.title);
 
         recipeName.setText(recipe.title);
+        recipeYield.setText(getString(R.string.servings, recipe.yield));
         recipeCost.setText("$$$");
         setRecipeImage(recipe.imageURL);
 
@@ -71,8 +74,6 @@ public class RecipeActivity extends AppCompatActivity {
         IngredientsAdapter adapter = new IngredientsAdapter(getApplicationContext());
         ingredientList.setAdapter(adapter);
         adapter.add(ingredients);
-
-        // TODO: Make full screen scrollable instead of Ingredient List
     }
 
     private void setRecipeImage(String url) {

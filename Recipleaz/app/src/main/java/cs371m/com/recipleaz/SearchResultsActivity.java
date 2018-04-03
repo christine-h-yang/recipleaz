@@ -63,6 +63,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
                         String imageURL = result.getString("image");
                         String title = result.getString("label");
+                        int yield = result.getInt("yield");
                         String instructionsURL = result.getString("url");
                         JSONArray ingredientsJSON = result.getJSONArray("ingredientLines");
                         String[] ingredients = new String[ingredientsJSON.length()];
@@ -70,7 +71,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                             ingredients[j] = ingredientsJSON.getString(j);
                         }
 
-                        Recipe recipe = new Recipe(imageURL, ingredients, instructionsURL, title);
+                        Recipe recipe = new Recipe(imageURL, yield, ingredients, instructionsURL, title);
                         recipes.add(recipe);
                         Log.d("testing", "fetchComplete: " + recipe);
                     }
