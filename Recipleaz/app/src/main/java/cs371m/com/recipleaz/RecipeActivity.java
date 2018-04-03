@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,7 +58,12 @@ public class RecipeActivity extends AppCompatActivity {
 
         // Handling Ingredient List
         LinearLayoutManager recyclerViewLayoutManager =
-                new LinearLayoutManager(getApplicationContext());
+                new LinearLayoutManager(getApplicationContext()) {
+                    @Override
+                    public boolean canScrollVertically() {
+                        return false;
+                    }
+                };
         ingredientList.setLayoutManager(recyclerViewLayoutManager);
 
         loadIngredientList(recipe.ingredients);
@@ -81,5 +87,14 @@ public class RecipeActivity extends AppCompatActivity {
         for (String name : ingredientList) {
             ingredients.add(new Ingredient(name, false));
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return false;
     }
 }
