@@ -5,4 +5,5 @@
     <string name="photo_upload">Upload a photo</string>
     <string name="or">or</string>
     <string name="ingredient_list">Ingredient List</string>
+    <string name="recipe_lookup">See Full Recipe</string>
 </resources>
