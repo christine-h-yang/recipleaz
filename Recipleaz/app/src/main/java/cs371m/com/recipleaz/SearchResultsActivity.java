@@ -41,7 +41,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         rv.setLayoutManager(recyclerViewLayoutManager);
         //rv.setItemAnimator(new DefaultItemAnimator());
 
-        adapter = new RecipeResultsAdapter(getApplicationContext());
+        adapter = new RecipeResultsAdapter(this);
         rv.setAdapter(adapter);
 
         Intent intent = getIntent();
