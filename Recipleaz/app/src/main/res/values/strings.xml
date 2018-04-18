@@ -8,4 +8,7 @@
     <string name="recipe_lookup">See Full Recipe</string>
     <string name="yield">Yield:</string>
     <string name="servings" formatted="false">%d servings</string>
+    <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
