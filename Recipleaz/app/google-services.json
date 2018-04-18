@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1049597224859",
+    "firebase_url": "https://recipleaz-e0d41.firebaseio.com",
+    "project_id": "recipleaz-e0d41",
+    "storage_bucket": "recipleaz-e0d41.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1049597224859:android:f4035089f1d4f13f",
+        "android_client_info": {
+          "package_name": "cs371m.com.recipleaz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1049597224859-mk2apk0nlfcmadoopmtc0tso0jo9imaf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cs371m.com.recipleaz",
+            "certificate_hash": "dc9db07ab8b82b7dec729744791b49a31b1b4dea"
+          }
+        },
+        {
+          "client_id": "1049597224859-chqdlc6odi8gsume5ifrg7des8c9qmb8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOUuw_Txvx84tj-EZBtL7wWXP76SjiBaA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1049597224859-chqdlc6odi8gsume5ifrg7des8c9qmb8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
