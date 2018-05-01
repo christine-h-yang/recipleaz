@@ -147,7 +147,6 @@ public class MainActivity extends AppCompatActivity
 
     private void updateUserDisplay() {
         String loginString = "";
-        String userString = "";
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             loginString = String.format("Log out as %s", user.getEmail());

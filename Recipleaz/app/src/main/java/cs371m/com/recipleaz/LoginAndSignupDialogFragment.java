@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -29,15 +30,17 @@ public class LoginAndSignupDialogFragment extends DialogFragment {
         final View view = inflater.inflate(R.layout.login_dialog, null);
 
         builder.setView(view)
-                // Add action buttons
                 .setPositiveButton(R.string.signin, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         EditText email = view.findViewById(R.id.email);
                         EditText password = view.findViewById(R.id.password);
 
-                        loginAndSignupInterface.login(email.getText().toString(),
-                                password.getText().toString());
+                        if (!email.getText().toString().trim().equals("")
+                                && !password.getText().toString().trim().equals("")) {
+                            loginAndSignupInterface.login(email.getText().toString(),
+                                    password.getText().toString());
+                        }
                     }
                 })
                 .setNegativeButton(R.string.signup, new DialogInterface.OnClickListener() {
@@ -46,8 +49,11 @@ public class LoginAndSignupDialogFragment extends DialogFragment {
                         EditText email = view.findViewById(R.id.email);
                         EditText password = view.findViewById(R.id.password);
 
-                        loginAndSignupInterface.signup(email.getText().toString(),
-                                password.getText().toString());
+                        if (!email.getText().toString().trim().equals("")
+                                && !password.getText().toString().trim().equals("")) {
+                            loginAndSignupInterface.signup(email.getText().toString(),
+                                    password.getText().toString());
+                        }
                     }
                 })
                 .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
