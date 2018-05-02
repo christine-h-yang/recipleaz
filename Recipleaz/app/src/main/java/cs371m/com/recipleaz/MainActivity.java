@@ -172,9 +172,7 @@ public class MainActivity extends AppCompatActivity
                                 if (task.isSuccessful()) {
                                     updateUserDisplay();
                                 } else {
-                                    //Toast.makeText(MainActivity.this, "Authentication failed.",
-                                            //Toast.LENGTH_LONG).show();
-                                    Toast.makeText(MainActivity.this, task.getException().toString(),
+                                    Toast.makeText(MainActivity.this, "Authentication failed.",
                                             Toast.LENGTH_LONG).show();
                                 }
                             }
