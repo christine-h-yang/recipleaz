@@ -66,9 +66,9 @@ public class SearchResultsActivity extends AppCompatActivity {
                         int yield = result.getInt("yield");
                         String instructionsURL = result.getString("url");
                         JSONArray ingredientsJSON = result.getJSONArray("ingredientLines");
-                        String[] ingredients = new String[ingredientsJSON.length()];
-                        for (int j = 0; j < ingredients.length; j++) {
-                            ingredients[j] = ingredientsJSON.getString(j);
+                        List<String> ingredients = new ArrayList<>();
+                        for (int j = 0; j < ingredientsJSON.length(); j++) {
+                            ingredients.add(ingredientsJSON.getString(j));
                         }
 
                         Recipe recipe = new Recipe(imageURL, yield, ingredients, instructionsURL, title);

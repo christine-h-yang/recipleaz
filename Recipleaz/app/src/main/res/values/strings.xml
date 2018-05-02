@@ -8,4 +8,16 @@
     <string name="recipe_lookup">See Full Recipe</string>
     <string name="yield">Yield:</string>
     <string name="servings" formatted="false">%d servings</string>
+    <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="signin">Sign in</string>
+    <string name="signup">Sign up</string>
+    <string name="cancel">Cancel</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="account">Account</string>
+    <string name="save_recipe">Save Recipe</string>
 </resources>

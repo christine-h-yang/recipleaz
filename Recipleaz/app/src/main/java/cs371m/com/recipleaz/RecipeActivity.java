@@ -8,37 +8,50 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeActivity extends AppCompatActivity {
 
     private ImageView recipeImage;
     private TextView recipeName;
-    private TextView recipeCost;
     private TextView recipeLink;
     private TextView recipeYield;
     private RecyclerView ingredientList;
     private Recipe recipe;
     private ArrayList<Ingredient> ingredients;
+    private Button saveRecipeButton;
+
+    private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recipe_page);
 
+        mAuth = FirebaseAuth.getInstance();
+
         recipeImage = findViewById(R.id.recipe_pic);
         recipeName = findViewById(R.id.recipe_name);
-        recipeCost = findViewById(R.id.recipe_cost);
         recipeLink = findViewById(R.id.recipe_link);
         recipeYield = findViewById(R.id.recipe_yield);
         ingredientList = findViewById(R.id.ingredient_list);
+        saveRecipeButton = findViewById(R.id.save_recipe_button);
 
         recipe = getIntent().getParcelableExtra("recipe");
 
@@ -46,7 +59,6 @@ public class RecipeActivity extends AppCompatActivity {
 
         recipeName.setText(recipe.title);
         recipeYield.setText(getString(R.string.servings, recipe.yield));
-        recipeCost.setText("$$$");
         setRecipeImage(recipe.imageURL);
 
         recipeLink.setPaintFlags(recipeLink.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -74,6 +86,20 @@ public class RecipeActivity extends AppCompatActivity {
         IngredientsAdapter adapter = new IngredientsAdapter(getApplicationContext());
         ingredientList.setAdapter(adapter);
         adapter.add(ingredients);
+
+        saveRecipeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseUser user = mAuth.getCurrentUser();
+
+                String email = user.getEmail().replaceAll("\\.", "@");
+                DatabaseReference userDB = FirebaseDatabase.getInstance().getReference(email);
+                String recipeIdentifier = recipe.instructionsURL.replaceAll("[\\.\\/]", "@");
+
+                userDB.child("saved_recipes").child(recipeIdentifier).setValue(recipe);
+                Toast.makeText(RecipeActivity.this, "Recipe saved!", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void setRecipeImage(String url) {
@@ -82,7 +108,7 @@ public class RecipeActivity extends AppCompatActivity {
                 .into(recipeImage);
     }
 
-    private void loadIngredientList(String[] ingredientList) {
+    private void loadIngredientList(List<String> ingredientList) {
         ingredients = new ArrayList<>();
 
         for (String name : ingredientList) {
