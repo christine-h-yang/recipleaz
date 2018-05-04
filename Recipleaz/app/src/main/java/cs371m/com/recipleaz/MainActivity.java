@@ -18,10 +18,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +37,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -96,12 +101,23 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        searchText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(final TextView v, final int actionId, final KeyEvent event)
+            {
+                if(EditorInfo.IME_ACTION_DONE==actionId || EditorInfo.IME_ACTION_UNSPECIFIED==actionId) {
+                    search(searchText.getText().toString());
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
-                intent.putExtra("searchText", searchText.getText().toString());
-                MainActivity.this.startActivity(intent);
+                search(searchText.getText().toString());
             }
         });
 
@@ -111,6 +127,12 @@ public class MainActivity extends AppCompatActivity
                 checkGalleryPermissions();
             }
         });
+    }
+
+    private void search(String text) {
+        Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
+        intent.putExtra("searchText", text);
+        MainActivity.this.startActivity(intent);
     }
 
     private void uploadPhoto() {
@@ -148,7 +170,12 @@ public class MainActivity extends AppCompatActivity
 
         if (requestCode == PICK_FROM_GALLERY && resultCode == RESULT_OK && data != null) {
             byte[] img = ClarifaiService.retrieveSelectedImage(this, data);
-            ClarifaiService.getInstance().processImage(img);
+            ClarifaiService.getInstance().processImage(img, new ClarifaiService.ProcessClarifaiConcepts() {
+                @Override
+                public void onPostExecute(List<String> concepts) {
+                    search(TextUtils.join(" ", concepts));
+                }
+            });
         }
     }
 

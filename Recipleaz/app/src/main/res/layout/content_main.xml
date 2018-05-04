@@ -36,7 +36,9 @@
             android:hint="@string/search_hint"
             android:textColor="@color/white"
             android:backgroundTint="@color/white"
-            android:textColorHint="@color/white"/>
+            android:textColorHint="@color/white"
+            android:imeOptions="actionDone"
+            android:inputType="text"/>
 
         <TextView
             android:layout_width="wrap_content"

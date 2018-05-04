@@ -15,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -29,6 +30,10 @@ import clarifai2.dto.prediction.Concept;
 import okhttp3.OkHttpClient;
 
 public class ClarifaiService {
+
+    public interface ProcessClarifaiConcepts {
+        public void onPostExecute(List<String> concepts);
+    }
 
     private static final String API_KEY  = "ec5f6c922de844428c4678e7e171adab";
 
@@ -100,8 +105,8 @@ public class ClarifaiService {
         new AsyncProcessImage(url).execute();
     }
 
-    public void processImage(byte[] imageBytes) {
-        new AsyncProcessImage(imageBytes).execute();
+    public void processImage(byte[] imageBytes, ProcessClarifaiConcepts onPostExecute) {
+        new AsyncProcessImage(imageBytes, onPostExecute).execute();
         /*
         final byte[] imageBytes = ClarifaiUtil.retrieveSelectedImage(this, data);
         if (imageBytes != null) {
@@ -111,9 +116,12 @@ public class ClarifaiService {
     }
 
     private static class AsyncProcessImage extends AsyncTask<Void, Void, ClarifaiResponse<List<ClarifaiOutput<Concept>>>> {
+
         String url;
         byte[] imageBytes;
         boolean isURL = false;
+        ProcessClarifaiConcepts conceptHandler;
+
         AsyncProcessImage() {
             throw new IllegalStateException("Cannot create an AsyncProcessImage with default constructor");
         }
@@ -123,9 +131,10 @@ public class ClarifaiService {
             isURL = true;
         }
 
-        AsyncProcessImage(byte[] imageBytes) {
+        AsyncProcessImage(byte[] imageBytes, ProcessClarifaiConcepts conceptHandler) {
             this.imageBytes = imageBytes;
             isURL = false;
+            this.conceptHandler = conceptHandler;
         }
 
         @Override protected ClarifaiResponse<List<ClarifaiOutput<Concept>>> doInBackground(Void... params) {
@@ -154,6 +163,18 @@ public class ClarifaiService {
             }
 
             Log.d("DATA", "onPostExecute: " + predictions.get(0).data());
+
+            if (conceptHandler != null) {
+                List<Concept> output = predictions.get(0).data();
+                List<String> simplePredictions = new ArrayList<>();
+                double minConfidence = 0.90;
+                for (Concept concept : output) {
+                    if (concept.value() >= minConfidence) {
+                        simplePredictions.add(concept.name());
+                    }
+                }
+                conceptHandler.onPostExecute(simplePredictions);
+            }
         }
     }
 }
