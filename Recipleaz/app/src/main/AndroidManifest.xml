@@ -29,6 +29,7 @@
             android:parentActivityName=".MainActivity" >
         </activity>
         <activity android:name=".SavedRecipeListActivity"
+            android:label="Saved Recipes"
             android:parentActivityName=".MainActivity" >
         </activity>
     </application>
