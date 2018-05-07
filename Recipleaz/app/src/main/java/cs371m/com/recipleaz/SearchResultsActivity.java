@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.MotionEvent;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -20,7 +20,7 @@ import java.util.List;
 public class SearchResultsActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
-    private RecipeResultsAdapter adapter;
+    private RecipeListAdapter adapter;
     private RecipeService recipeService;
     protected LinearLayoutManager recyclerViewLayoutManager;
 
@@ -28,20 +28,20 @@ public class SearchResultsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_results);
+        setContentView(R.layout.recipe_list_view);
 
         recipeService = RecipeService.getInstance();
 
         progressBar = findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.VISIBLE);
 
-        RecyclerView rv = findViewById(R.id.search_results);
+        RecyclerView rv = findViewById(R.id.recipes);
 
         recyclerViewLayoutManager = new LinearLayoutManager(getApplicationContext());
         rv.setLayoutManager(recyclerViewLayoutManager);
         //rv.setItemAnimator(new DefaultItemAnimator());
 
-        adapter = new RecipeResultsAdapter(this);
+        adapter = new RecipeListAdapter(this);
         rv.setAdapter(adapter);
 
         Intent intent = getIntent();
@@ -67,11 +67,13 @@ public class SearchResultsActivity extends AppCompatActivity {
                         String instructionsURL = result.getString("url");
                         JSONArray ingredientsJSON = result.getJSONArray("ingredientLines");
                         List<String> ingredients = new ArrayList<>();
+                        List<Boolean> ingredientsCheckList = new ArrayList<>();
                         for (int j = 0; j < ingredientsJSON.length(); j++) {
                             ingredients.add(ingredientsJSON.getString(j));
+                            ingredientsCheckList.add(false);
                         }
 
-                        Recipe recipe = new Recipe(imageURL, yield, ingredients, instructionsURL, title);
+                        Recipe recipe = new Recipe(imageURL, yield, ingredients, ingredientsCheckList, instructionsURL, title);
                         recipes.add(recipe);
                         Log.d("testing", "fetchComplete: " + recipe);
                     }

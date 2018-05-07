@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.IngredientsViewHolder> {
-    private ArrayList<Ingredient> mData = new ArrayList<>();
+    private ArrayList<String> ingredients = new ArrayList<>();
+    private ArrayList<Boolean> ingredientsChecklist = new ArrayList<>();
     private Context context;
 
     public class IngredientsViewHolder extends RecyclerView.ViewHolder  {
@@ -27,7 +28,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
                 public void onClick(View v) {
                     ingredient.toggle();
                     boolean isChecked = ingredient.isChecked();
-                    mData.get(getAdapterPosition()).isChecked = isChecked;
+                    ingredientsChecklist.set(getAdapterPosition(), isChecked);
                 }
             });
         }
@@ -47,24 +48,27 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
     @Override
     public void onBindViewHolder(IngredientsViewHolder holder, final int position) {
-        Ingredient ingredient = mData.get(position);
-
-        holder.ingredient.setText(ingredient.name);
-        holder.ingredient.setChecked(ingredient.isChecked);
+        holder.ingredient.setText(ingredients.get(position));
+        holder.ingredient.setChecked(ingredientsChecklist.get(position));
     }
 
     @Override
     public long getItemId(int position) {
-        return mData.get(position).hashCode();
+        return ingredients.get(position).hashCode();
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return ingredients.size();
     }
 
-    public void add(List<Ingredient> ingredients) {
-        mData.addAll(ingredients);
+    public void add(List<String> ingredients, List<Boolean> ingredientsChecklist) {
+        this.ingredients.addAll(ingredients);
+        this.ingredientsChecklist.addAll(ingredientsChecklist);
         notifyDataSetChanged();
+    }
+
+    public List<Boolean> getChecklist() {
+        return ingredientsChecklist;
     }
 }

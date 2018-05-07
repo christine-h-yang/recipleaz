@@ -243,6 +243,10 @@ public class MainActivity extends AppCompatActivity
                     updateUserDisplay();
                 }
                 return true;
+            case R.id.saved_recipes:
+                Intent intent = new Intent(getApplicationContext(), SavedRecipeListActivity.class);
+                MainActivity.this.startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

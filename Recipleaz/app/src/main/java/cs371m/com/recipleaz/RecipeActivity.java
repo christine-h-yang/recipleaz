@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -33,8 +32,9 @@ public class RecipeActivity extends AppCompatActivity {
     private TextView recipeYield;
     private RecyclerView ingredientList;
     private Recipe recipe;
-    private ArrayList<Ingredient> ingredients;
     private Button saveRecipeButton;
+
+    private IngredientsAdapter ingredientsAdapter;
 
     private FirebaseAuth mAuth;
 
@@ -81,15 +81,16 @@ public class RecipeActivity extends AppCompatActivity {
                 };
         ingredientList.setLayoutManager(recyclerViewLayoutManager);
 
-        loadIngredientList(recipe.ingredients);
-
-        IngredientsAdapter adapter = new IngredientsAdapter(getApplicationContext());
-        ingredientList.setAdapter(adapter);
-        adapter.add(ingredients);
+        ingredientsAdapter = new IngredientsAdapter(getApplicationContext());
+        ingredientList.setAdapter(ingredientsAdapter);
+        ingredientsAdapter.add(recipe.ingredients, recipe.ingredientsChecklist);
 
         saveRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // update ingredient checklist
+                recipe.ingredientsChecklist = ingredientsAdapter.getChecklist();
+
                 FirebaseUser user = mAuth.getCurrentUser();
 
                 String email = user.getEmail().replaceAll("\\.", "@");
@@ -106,14 +107,6 @@ public class RecipeActivity extends AppCompatActivity {
         Glide.with(getApplicationContext())
                 .load(url)
                 .into(recipeImage);
-    }
-
-    private void loadIngredientList(List<String> ingredientList) {
-        ingredients = new ArrayList<>();
-
-        for (String name : ingredientList) {
-            ingredients.add(new Ingredient(name, false));
-        }
     }
 
     @Override

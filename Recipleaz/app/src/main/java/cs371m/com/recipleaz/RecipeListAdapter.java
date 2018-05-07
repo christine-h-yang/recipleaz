@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeResultsAdapter extends RecyclerView.Adapter<RecipeResultsAdapter.ResultsViewHolder> {
+public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.ResultsViewHolder> {
     private ArrayList<Recipe> mData = new ArrayList<>();
     private Context context;
 
@@ -57,7 +57,7 @@ public class RecipeResultsAdapter extends RecyclerView.Adapter<RecipeResultsAdap
         }
     }
 
-    public RecipeResultsAdapter(Context _context) {
+    public RecipeListAdapter(Context _context) {
         this.context = _context;
     }
 

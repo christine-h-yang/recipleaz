@@ -10,13 +10,17 @@ public class Recipe implements Parcelable {
     public String imageURL;
     public int yield;
     public List<String> ingredients;
+    public List<Boolean> ingredientsChecklist;
     public String instructionsURL;
     public String title;
 
-    public Recipe(String imageURL, int yield, List<String> ingredients, String instructionsURL, String title) {
+    public Recipe () {}
+
+    public Recipe(String imageURL, int yield, List<String> ingredients, List<Boolean> ingredientsChecklist, String instructionsURL, String title) {
         this.imageURL = imageURL;
         this.yield = yield;
         this.ingredients = ingredients;
+        this.ingredientsChecklist = ingredientsChecklist;
         this.instructionsURL = instructionsURL;
         this.title = title;
     }
@@ -26,6 +30,8 @@ public class Recipe implements Parcelable {
         yield = in.readInt();
         ingredients = new ArrayList<>();
         in.readList(ingredients, String.class.getClassLoader());
+        ingredientsChecklist = new ArrayList<>();
+        in.readList(ingredientsChecklist, Boolean.class.getClassLoader());
         instructionsURL = in.readString();
         title = in.readString();
     }
@@ -50,6 +56,7 @@ public class Recipe implements Parcelable {
         dest.writeString(imageURL);
         dest.writeInt(yield);
         dest.writeList(ingredients);
+        dest.writeList(ingredientsChecklist);
         dest.writeString(instructionsURL);
         dest.writeString(title);
     }
