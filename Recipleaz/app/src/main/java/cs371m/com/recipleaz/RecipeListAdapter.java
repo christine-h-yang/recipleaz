@@ -31,7 +31,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
             implements View.OnClickListener, View.OnLongClickListener {
         private TextView textView;
         private ImageView imageView;
+        private TextView yieldView;
         private String text;
+        private String yield;
         private String imageURL;
 
         public ResultsViewHolder(View view) {
@@ -40,6 +42,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
             view.setOnLongClickListener(this);
             imageView = view.findViewById(R.id.recipe_pic);
             textView = view.findViewById(R.id.recipe_name);
+            yieldView = view.findViewById(R.id.listview_item_short_description);
         }
 
         public void setText(String text) {
@@ -52,6 +55,11 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
             Glide.with(context)
                     .load(imageURL)
                     .into(imageView);
+        }
+
+        public void setYield(String text) {
+            this.yield = text;
+            yieldView.setText(text);
         }
 
         @Override
@@ -105,6 +113,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
         holder.setText(recipe.title);
         holder.setImage(recipe.imageURL);
+        holder.setYield("This recipe yields " + recipe.yield + " servings");
     }
 
     @Override

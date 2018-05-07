@@ -168,9 +168,11 @@ public class ClarifaiService {
                 List<Concept> output = predictions.get(0).data();
                 List<String> simplePredictions = new ArrayList<>();
                 double minConfidence = 0.90;
+                int numPredictions = 0;
                 for (Concept concept : output) {
-                    if (concept.value() >= minConfidence) {
+                    if (concept.value() >= minConfidence && numPredictions < 3) {
                         simplePredictions.add(concept.name());
+                        numPredictions++;
                     }
                 }
                 conceptHandler.onPostExecute(simplePredictions);

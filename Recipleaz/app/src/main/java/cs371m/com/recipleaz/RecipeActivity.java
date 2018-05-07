@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -21,11 +22,15 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class RecipeActivity extends AppCompatActivity {
 
     private ImageView recipeImage;
     private TextView recipeName;
     private TextView recipeLink;
+    private TextView priceEstimate;
     private TextView recipeYield;
     private RecyclerView ingredientList;
     private Recipe recipe;
@@ -46,6 +51,7 @@ public class RecipeActivity extends AppCompatActivity {
         recipeImage = findViewById(R.id.recipe_pic);
         recipeName = findViewById(R.id.recipe_name);
         recipeLink = findViewById(R.id.recipe_link);
+        priceEstimate = findViewById(R.id.price_estimate);
         recipeYield = findViewById(R.id.recipe_yield);
         ingredientList = findViewById(R.id.ingredient_list);
         saveRecipeButton = findViewById(R.id.save_recipe_button);
@@ -101,6 +107,31 @@ public class RecipeActivity extends AppCompatActivity {
 
                 userDB.child("saved_recipes").child(recipeIdentifier).setValue(recipe);
                 Toast.makeText(RecipeActivity.this, "Recipe saved!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+        RecipleazBackendService.getInstance().getPriceEstimate(recipe.title, new RecipeJSON.IRecipeJSON() {
+            @Override
+            public void fetchStart() {
+
+            }
+
+            @Override
+            public void fetchComplete(JSONObject response) {
+                try {
+                    String estimate = response.getString("estimate");
+                    Log.d("DONE", "fetchComplete: " + estimate);
+                    priceEstimate.setText("Price Estimate: " + estimate);
+                } catch (JSONException e) {
+                    Log.d("DONE", "fetchComplete: " + e.getMessage());
+                }
+
+            }
+
+            @Override
+            public void fetchCancel() {
+                Log.d("CANCLLED", "fetchComplete: cancelled");
             }
         });
     }
