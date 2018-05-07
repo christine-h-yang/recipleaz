@@ -244,6 +244,12 @@ public class MainActivity extends AppCompatActivity
                 }
                 return true;
             case R.id.saved_recipes:
+                FirebaseUser user = mAuth.getCurrentUser();
+                if (user == null) {
+                    Toast.makeText(MainActivity.this, "Please login to use this feature",
+                            Toast.LENGTH_SHORT).show();
+                    return true;
+                }
                 Intent intent = new Intent(getApplicationContext(), SavedRecipeListActivity.class);
                 MainActivity.this.startActivity(intent);
                 return true;

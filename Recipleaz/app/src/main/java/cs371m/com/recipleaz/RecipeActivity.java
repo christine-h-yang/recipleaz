@@ -21,9 +21,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RecipeActivity extends AppCompatActivity {
 
     private ImageView recipeImage;
@@ -93,6 +90,11 @@ public class RecipeActivity extends AppCompatActivity {
 
                 FirebaseUser user = mAuth.getCurrentUser();
 
+                if (user == null) {
+                    Toast.makeText(RecipeActivity.this, "Please login to use this feature",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String email = user.getEmail().replaceAll("\\.", "@");
                 DatabaseReference userDB = FirebaseDatabase.getInstance().getReference(email);
                 String recipeIdentifier = recipe.instructionsURL.replaceAll("[\\.\\/]", "@");

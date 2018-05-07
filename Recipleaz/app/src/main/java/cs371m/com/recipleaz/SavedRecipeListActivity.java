@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,10 +56,6 @@ public class SavedRecipeListActivity extends AppCompatActivity
     private void loadSavedRecipes() {
         FirebaseUser user = mAuth.getCurrentUser();
 
-        if (user == null) {
-            return;
-        }
-
         String email = user.getEmail().replaceAll("\\.", "@");
         DatabaseReference userDB = FirebaseDatabase.getInstance().getReference(email);
 
@@ -87,7 +84,11 @@ public class SavedRecipeListActivity extends AppCompatActivity
         FirebaseUser user = mAuth.getCurrentUser();
 
         if (user == null) {
-            return;
+            if (user == null) {
+                Toast.makeText(this, "Please login to use this feature",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
 
         String email = user.getEmail().replaceAll("\\.", "@");
