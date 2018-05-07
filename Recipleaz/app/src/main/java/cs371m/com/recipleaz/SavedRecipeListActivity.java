@@ -21,7 +21,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SavedRecipeListActivity extends AppCompatActivity {
+public class SavedRecipeListActivity extends AppCompatActivity
+        implements RecipeListAdapter.DeleteRecipeInterface {
 
     private RecipeListAdapter adapter;
     private ProgressBar progressBar;
@@ -44,6 +45,8 @@ public class SavedRecipeListActivity extends AppCompatActivity {
         rv.setLayoutManager(recyclerViewLayoutManager);
 
         adapter = new RecipeListAdapter(this);
+        adapter.setIsSavedRecipesList(true);
+        adapter.setDeleteRecipeInterface(this);
         rv.setAdapter(adapter);
 
         loadSavedRecipes();
@@ -51,6 +54,10 @@ public class SavedRecipeListActivity extends AppCompatActivity {
 
     private void loadSavedRecipes() {
         FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user == null) {
+            return;
+        }
 
         String email = user.getEmail().replaceAll("\\.", "@");
         DatabaseReference userDB = FirebaseDatabase.getInstance().getReference(email);
@@ -74,5 +81,19 @@ public class SavedRecipeListActivity extends AppCompatActivity {
                     }
                 });
         userDB.child("saved_recipes");
+    }
+
+    public void deleteSavedRecipe(Recipe recipe) {
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user == null) {
+            return;
+        }
+
+        String email = user.getEmail().replaceAll("\\.", "@");
+        DatabaseReference userDB = FirebaseDatabase.getInstance().getReference(email);
+        String recipeIdentifier = recipe.instructionsURL.replaceAll("[\\.\\/]", "@");
+
+        userDB.child("saved_recipes").child(recipeIdentifier).removeValue();
     }
 }

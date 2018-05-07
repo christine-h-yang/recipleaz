@@ -1,6 +1,8 @@
 package cs371m.com.recipleaz;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,8 +20,15 @@ import java.util.List;
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.ResultsViewHolder> {
     private ArrayList<Recipe> mData = new ArrayList<>();
     private Context context;
+    private boolean isSavedRecipesList = false;
+    private DeleteRecipeInterface deleteRecipeInterface;
 
-    public class ResultsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    interface DeleteRecipeInterface {
+        void deleteSavedRecipe(Recipe recipe);
+    }
+
+    public class ResultsViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener, View.OnLongClickListener {
         private TextView textView;
         private ImageView imageView;
         private String text;
@@ -28,6 +37,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         public ResultsViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
+            view.setOnLongClickListener(this);
             imageView = view.findViewById(R.id.recipe_pic);
             textView = view.findViewById(R.id.recipe_name);
         }
@@ -46,14 +56,34 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
         @Override
         public void onClick(View view) {
-            Log.d("ONCLICK", "onClick: CLICKED SOMETHING");
-            ClarifaiService.getInstance().processImage(imageURL);
-
             Recipe recipe = mData.get(getAdapterPosition());
 
             Intent intent = new Intent(context, RecipeActivity.class);
             intent.putExtra("recipe", recipe);
             context.startActivity(intent);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            if (!isSavedRecipesList) {
+                return true;
+            }
+            AlertDialog confirmDeleteDialog = new AlertDialog.Builder(context)
+                    .setTitle("Delete this recipe?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            deleteRecipeInterface.deleteSavedRecipe(mData.get(getAdapterPosition()));
+                            removeItem(getAdapterPosition());
+                            dialog.dismiss();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create();
+            confirmDeleteDialog.show();
+            return true;
         }
     }
 
@@ -89,6 +119,19 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
     public void add(List<Recipe> recipes) {
         mData.addAll(recipes);
+        notifyDataSetChanged();
+    }
+
+    public void setIsSavedRecipesList(boolean isSavedRecipesList) {
+        this.isSavedRecipesList = isSavedRecipesList;
+    }
+
+    public void setDeleteRecipeInterface(DeleteRecipeInterface deleteRecipeInterface) {
+        this.deleteRecipeInterface = deleteRecipeInterface;
+    }
+
+    private void removeItem(int position) {
+        mData.remove(position);
         notifyDataSetChanged();
     }
 }
